@@ -1,5 +1,5 @@
 //
-// Created by Jeremi Toroj on 22.10.23.
+// Created by Jeremi on 22.10.23.
 //
 
 #ifndef ZESTAW2_LINKEDQUEUE_HPP

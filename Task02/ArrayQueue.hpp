@@ -36,7 +36,7 @@ public:
         return current_size;
     }
 
-    T& front(){
+    T& front_ref(){
       if(empty()){
           throw std::out_of_range("Underflow - queue is empty.");
       }
@@ -57,7 +57,7 @@ public:
     }
 
     template<class U>
-    void push(U&& arg){ // universal/forwarding reference
+    void push(U &&arg){ // universal/forwarding reference
         if(size() == capacity){
             throw std::out_of_range("Overflow - queue is full.");
         }
