@@ -1,5 +1,5 @@
 //
-// Created by Jeremi Torój on 22.10.23.
+// Created by Jeremi Toroj on 22.10.23.
 //
 
 #ifndef ZESTAW2_ARRAYQUEUE_HPP

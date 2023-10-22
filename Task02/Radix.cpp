@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+
 // #include "LinkedQueue.hpp"
 #include "ArrayQueue.hpp"
 
@@ -48,7 +49,6 @@ int main(){
 
     radix(container);
 
-    std::cout << "-----results----" << std::endl;
     for(const auto& element: container){
         std::cout << element << std::endl;
     }
