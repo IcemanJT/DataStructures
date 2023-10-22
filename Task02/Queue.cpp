@@ -1,3 +1,7 @@
+//
+// Created by Jeremi Toroj on 22.10.23.
+//
+
 #include <iostream>
 #include "LinkedQueue.hpp"
 #include "ArrayQueue.hpp"
@@ -14,8 +18,8 @@ int main()  {
     char operation;
 
     // choose implementation
-    //LinkedQueue<int,MAX_CAPACITY> queue;
-    ArrayQueue<int,MAX_CAPACITY> queue;
+    LinkedQueue<int,MAX_CAPACITY> queue;
+    //ArrayQueue<int,MAX_CAPACITY> queue;
 
     // handles input
     while(n_operations--) {
