@@ -11,6 +11,7 @@ const int MAX_CAPACITY = 1e6;
 int main()  {
     std::ios_base::sync_with_stdio(false);
 
+    // number of opertaions
     int n_operations;
     std::cin >> n_operations;
 
@@ -22,7 +23,9 @@ int main()  {
     //ArrayQueue<int,MAX_CAPACITY> queue;
 
     // handles input
-    while(n_operations--) {
+
+    // while there are still operations to do
+    while (n_operations--) {
         std::cin >> operation;
         if (operation == 'A'){
             int number;
@@ -33,8 +36,9 @@ int main()  {
             if (!queue.empty()){
                 std::cout << queue.pop() << std::endl;
             }
-            else
+            else {
                 std::cout << "EMPTY" << std::endl;
+            }
         }
         else if (operation == 'S'){
             std::cout << queue.size() << std::endl;

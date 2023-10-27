@@ -1,15 +1,13 @@
 CXXFLAGS = -Wall -pedantic -O3
 LDFLAGS = -s
 
-TARGETS = Queue.x Generator.x Radix.x
+TARGETS = Queue.x Radix.x
 
 QUEUE_SOURCES = Queue.cpp
-GENERATOR_SOURCES = Generator.cpp
 RADIX_SOURCES = Radix.cpp
 
 
 STACK_OBJECTS = $(STACK_SOURCES:.cpp=.o)
-GENERATOR_OBJECTS = $(GENERATOR_SOURCES:.cpp=.o)
 RADIX_OBJECTS = $(RADIX_SOURCES:.cpp=.o)
 
 HEADERS = ArrayQueue.hpp LinkedQueue.hpp
