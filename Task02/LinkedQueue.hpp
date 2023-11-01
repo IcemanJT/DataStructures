@@ -12,9 +12,11 @@ template<typename T, int N>
 class LinkedQueue{
 private:
 
-    // Node struct of
+    // Node struct
     struct Node {
-        explicit Node(const T& aug): data{aug}, next{nullptr} {};
+    	// perfect forwading
+    	template <typename U>
+        explicit Node(U&& aug): data{aug}, next{nullptr} {}
 
         T data;
         Node* next;
