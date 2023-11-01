@@ -7,14 +7,12 @@
 
 
 int main() {
-
     std::ios_base::sync_with_stdio(false);
 
     LinkedList<int> List;
 
     int num_of_operations;
     std::cin >> num_of_operations;
-
 
 
     while(num_of_operations--){

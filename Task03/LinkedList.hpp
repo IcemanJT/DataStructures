@@ -15,14 +15,17 @@ public:
 
 // ################################## Node Class ######################################
     struct Node {
-        T data;
-        Node* next;
-        Node* prev;
+        T data;         // data
+        Node* next;     // next Node
+        Node* prev;     // previous Node
 
+        // default constructor
         Node() : data(T()), next(nullptr), prev(nullptr) {}
 
+        // copy constructor
         explicit Node(const T& aug) : data(aug), next(nullptr), prev(nullptr) {}
 
+        // move constructor
         explicit Node(T&& aug) : data(aug), next(nullptr), prev(nullptr) {}
 
         /*
@@ -47,42 +50,45 @@ public:
         // constructor
         explicit Iterator( Node *ptr = nullptr ): currentNode{ptr} {};
 
-        T* operator->() {
-            return &(currentNode->data);
-        }
-
+        // pre-increment
         Iterator operator++() {
             currentNode = currentNode->next;
             return *this;
         }
 
+        // pre-decrement
         Iterator operator--() {
             currentNode = currentNode->prev;
             return *this;
         }
 
-        T& operator*(){
-            return currentNode->data;
-        }
-
-        bool operator==(const Iterator& other ){
-            return currentNode == other.currentNode;
-        }
-
-        bool operator!=(const Iterator& other ){
-            return !(currentNode == other.currentNode);
-        }
-
+        // post-increment
         Iterator operator++(int) {
             Node *helper = currentNode;
             currentNode = currentNode->next;
             return Iterator{helper};
         }
 
+        // post-decrement
         Iterator operator--(int) {
             Node *helper = currentNode;
             currentNode = currentNode->prev;
             return Iterator{helper};
+        }
+
+        // returns reference to data held by Node pointer by iterator
+        T& operator*(){
+            return currentNode->data;
+        }
+
+        // checks if Nodes that two iterators are pointing to are equal
+        bool operator==(const Iterator& other ){
+            return currentNode == other.currentNode;
+        }
+
+        // opposite UP
+        bool operator!=(const Iterator& other ){
+            return !(currentNode == other.currentNode);
         }
 
     };
@@ -98,7 +104,7 @@ public:
         guard->next = guard;
         guard->prev = guard;
     }
-
+// ################################## Constructor ######################################
 
 // ################################## Basic methods ######################################
     int size(){
@@ -108,23 +114,28 @@ public:
     bool empty(){
         return current_size == 0;
     }
+// ################################## Basic methods ######################################
 
 // ################################## Iterator Methods ######################################
 
-
+    // returns iterator pointing at first element
     Iterator begin(){
         return Iterator{ guard->next };
     }
 
+    // returns iterator pointing at guard
     Iterator end(){
         return Iterator{ guard };
     }
 
+    // adds Node before Node that it is pointing to
     template<class U>
     Iterator insert( Iterator it, U&& x ){
 
+        // creates newNode
         Node* newNode = new Node(std::forward<U>(x));
 
+        // if list is empty creates first Node
         if( current_size == 0 ){
 
             guard->next = newNode;
@@ -158,6 +169,7 @@ public:
 
     }
 
+    // finds first Node storing data x
     Iterator find(const T& x){
         Iterator it = begin();
 
@@ -170,9 +182,13 @@ public:
 
         return it;
     }
+// ################################## Iterator Methods ######################################
+
 
 // ################################## List Methods ######################################
 
+
+    // adds Node to the front of the list
     template < class U >
     void push_front( U&& x ){
         if( size() == capacity ){
@@ -182,16 +198,18 @@ public:
         insert(begin(), std::forward<U>(x));
     }
 
+    // removes first element of the list and returns its data
     T pop_front(){
         if( empty() ){
             throw std::out_of_range("Underflow - list is empty.");
         }
 
-        T val = guard->next->data;
-        erase(begin());
-        return val;
+        T val = guard->next->data;      // stores first Node's data
+        erase(begin());              // removes first Node
+        return val;                     // returns its data
     }
 
+    // adds new Node at the end of list
     template < class U >
     void push_back( U&& x ){
         if( size() == capacity ){
@@ -201,23 +219,25 @@ public:
         insert(end(), std::forward<U>(x));
     }
 
+    // removes last node and returns its data
     T pop_back(){
         if( empty() ){
             throw std::out_of_range("Underflow - list is empty.");
         }
 
-        T val = guard->prev->data;
-        erase(Iterator{guard->prev});
-        return val;
+        T val = guard->prev->data;             // saves data
+        erase(Iterator{guard->prev});       // deletes last Node
+        return val;                            // returns val of last Node
     }
 
+    // removes all Nodes(x) and returns number of Nodes which stored x
     int remove(const T& x){
         if( empty() ){
             throw std::out_of_range("Underflow - list is empty.");
         }
 
-        int result = 0;
-        Iterator it = begin();
+        int result = 0;             // counter
+        Iterator it = begin();      // iterator = gourd->next
 
         while( it != end() ){
             if( it->data == x ){
@@ -226,27 +246,30 @@ public:
                 current_size--;
             }
             else
-                it++;           // if I always increment erase() is gonna cause skipping of element
+                it++;           // if I always increment it erase() is gonna cause skipping of element
 
         }
 
         return result;
     }
 
+    // finds Node which stored data == x and erases Node with x then creates newNode in place of it storing y
     template<class U>
     bool replace(const T& x, U&& y)
     {
-        Iterator firstX = find(x);
+        Iterator firstX = find(x);  // finds first Node with x
 
-        if(firstX != end())
+        if(firstX != end())         // checking for success
         {
-            insert(erase(firstX), std::forward<U>(y));
+            insert(erase(firstX), std::forward<U>(y));  // erase old Node(x), insert Node(y) in its place
             return true;
         }
+
+        // element wasn't found
         return false;
     }
 
-
+    // deletes all nodes till guard
     void clear(){
 
         Iterator it = begin();
@@ -256,6 +279,8 @@ public:
         }
 
     }
+// ################################## List Methods ######################################
+
 
 // ################################## Destructor ######################################
 
@@ -266,9 +291,9 @@ public:
 
 private:
 
-    Node* guard;
-    int current_size;
-    int capacity;
+    Node* guard;        // pointer to guard Node which stores pointers to first and last element
+    int current_size;   // current size of list
+    int capacity;       // max list capacity
 
 };
 
