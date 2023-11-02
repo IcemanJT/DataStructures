@@ -122,7 +122,6 @@ public:
 
     // Copy constructor
     LinkedList(const LinkedList& other) : capacity(other.capacity), current_size(0) {
-        std::cout << "Copy const." << std::endl;
         guard = new Node();
         guard->next = guard;
         guard->prev = guard;
@@ -142,7 +141,6 @@ public:
 
     // Move constructor
     LinkedList( LinkedList&& other ) noexcept : capacity(other.capacity), current_size(other.current_size), guard(other.guard) {
-        std::cout << "Move const." << std::endl;
         // Reset the other list
         other.capacity = 0;
         other.current_size = 0;
@@ -170,7 +168,6 @@ public:
             // Swap the contents of 'temp' and 'this'
             std::swap( *this, temp );
         }
-        std::cout << "Copy operator." << std::endl;
         return *this;
     }
 
@@ -199,7 +196,6 @@ public:
             other.current_size = 0;
             other.guard = nullptr;
         }
-        std::cout << "Move operator." << std::endl;
         return *this;
     }
 
