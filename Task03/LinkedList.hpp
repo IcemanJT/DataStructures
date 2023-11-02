@@ -5,15 +5,15 @@
 #ifndef ZESTAW3_LINKEDLIST_HPP
 #define ZESTAW3_LINKEDLIST_HPP
 
-
 #include <iostream>
+#include <algorithm>
+#include <utility>
 
 template<class T>
 class LinkedList{
-
-public:
-
+private:
 // ################################## Node Class ######################################
+
     struct Node {
         T data;         // data
         Node* next;     // next Node
@@ -30,19 +30,32 @@ public:
 
         /*
 
+        // perfect forwarding
         template <typename U>
         explicit Node( U&& aug ): data{aug}, next{nullptr}, prev{nullptr} {};
 
         Clang-Tidy: Constructor accepting a forwarding reference can hide the copy and move constructors
 
          */
-
-
     };
+
 // ################################## Node Class ######################################
 
 
+// ################################## Vars ######################################
+
+
+    int capacity;       // max list capacity
+    int current_size;   // current size of list
+    Node* guard;        // pointer to guard Node which stores pointers to first and last element
+
+// ################################## Vars ######################################
+
+public:
+
+
 // ################################## Iterator Class ######################################
+
     struct Iterator{
 
         Node* currentNode;
@@ -73,7 +86,7 @@ public:
         Iterator operator--(int) {
             Node *helper = currentNode;
             currentNode = currentNode->prev;
-            return Iterator{helper};
+            return Iterator{ helper };
         }
 
         // returns reference to data held by Node pointer by iterator
@@ -92,11 +105,13 @@ public:
         }
 
     };
+
 // ################################## Iterator Class ######################################
 
 
+// ################################## Constructors ######################################
 
-// ################################## Constructor ######################################
+    // default constructor
     explicit LinkedList(int cap = 1000){
         capacity = cap;
         current_size = 0;
@@ -104,27 +119,125 @@ public:
         guard->next = guard;
         guard->prev = guard;
     }
-// ################################## Constructor ######################################
+
+    // Copy constructor
+    LinkedList(const LinkedList& other) : capacity(other.capacity), current_size(0) {
+        std::cout << "Copy const." << std::endl;
+        guard = new Node();
+        guard->next = guard;
+        guard->prev = guard;
+
+        // Copy elements from the other list to this list
+        for (const auto& element : other) {
+            push_back(element);
+        }
+    }
+
+    /*
+
+    LinkedList<int> originalList;
+    LinkedList<int> copiedList = originalList; // Copy constructor is used
+
+     */
+
+    // Move constructor
+    LinkedList( LinkedList&& other ) noexcept : capacity(other.capacity), current_size(other.current_size), guard(other.guard) {
+        std::cout << "Move const." << std::endl;
+        // Reset the other list
+        other.capacity = 0;
+        other.current_size = 0;
+        other.guard = nullptr;
+    }
+
+    /*
+
+    LinkedList<int> temp = createTempList();
+    LinkedList<int> newList = std::move(temp); // Move constructor is used
+
+     */
+
+// ################################## Constructors ######################################
+
+
+// ################################## Operators ######################################
+
+    // Copy assignment operator
+    LinkedList& operator=( const LinkedList& other ) {
+        if (this != &other) {  // Check for self-assignment
+            // Create a temporary list to copy from 'other'
+            LinkedList temp(other);
+
+            // Swap the contents of 'temp' and 'this'
+            std::swap( *this, temp );
+        }
+        std::cout << "Copy operator." << std::endl;
+        return *this;
+    }
+
+    /*
+
+    LinkedList<int> list1;
+    LinkedList<int> list2;
+    list1 = list2; // Copy assignment operator is used
+
+     */
+
+    // Move assignment operator
+    LinkedList& operator=( LinkedList&& other ) noexcept {
+        if (this != &other) {  // Check for self-assignment
+            // Clear the current list
+            clear();
+            delete guard;
+
+            // Transfer ownership of 'other' to 'this'
+            capacity = other.capacity;
+            current_size = other.current_size;
+            guard = other.guard;
+
+            // Reset 'other'
+            other.capacity = 0;
+            other.current_size = 0;
+            other.guard = nullptr;
+        }
+        std::cout << "Move operator." << std::endl;
+        return *this;
+    }
+
+    /*
+
+    LinkedList<int> list1;
+    LinkedList<int> list2 = createTempList();
+    list1 = std::move(list2); // Move assignment operator is used
+
+
+     */
+
+
+// ################################## Operators ######################################
+
 
 // ################################## Basic methods ######################################
+
     int size(){
         return current_size;
     }
 
     bool empty(){
-        return current_size == 0;
+        return current_size==0;
     }
+
 // ################################## Basic methods ######################################
+
 
 // ################################## Iterator Methods ######################################
 
     // returns iterator pointing at first element
-    Iterator begin(){
+    Iterator begin() const {
         return Iterator{ guard->next };
     }
 
     // returns iterator pointing at guard
-    Iterator end(){
+    Iterator end() const {
         return Iterator{ guard };
     }
 
@@ -153,7 +266,7 @@ public:
 
         }
         ++current_size;
-        return Iterator{newNode};
+        return Iterator{ newNode };
     }
 
     Iterator erase(Iterator it){
@@ -182,11 +295,11 @@ public:
 
         return it;
     }
+
 // ################################## Iterator Methods ######################################
 
 
 // ################################## List Methods ######################################
-
 
     // adds Node to the front of the list
     template < class U >
@@ -272,13 +385,17 @@ public:
     // deletes all nodes till guard
     void clear(){
 
-        Iterator it = begin();
+        if(!empty()) {
 
-        while(it != end()){
-            it = erase(it);
+            Iterator it = begin();
+
+            while (it != end()) {
+                it = erase(it);
+            }
+
         }
-
     }
+
 // ################################## List Methods ######################################
 
 
@@ -289,11 +406,6 @@ public:
         delete guard;
     }
 
-private:
-
-    Node* guard;        // pointer to guard Node which stores pointers to first and last element
-    int current_size;   // current size of list
-    int capacity;       // max list capacity
 
 };
 

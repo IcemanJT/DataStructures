@@ -1,5 +1,5 @@
 //
-// Created by hidan on 01.11.23.
+// Created by Jeremi Toroj on 01.11.23.
 //
 
 #include <iostream>
