@@ -2,6 +2,7 @@
 // Created by Jeremi Toroj on 26.11.23.
 //
 
+#include <iostream>
 #include <vector>
 
 
@@ -25,6 +26,22 @@ void sort(std::vector<T>& v) {
 
 
 int main(){
+
+   std::ios_base::sync_with_stdio(false);
+
+    std::vector<int> v;
+
+    int x;
+    while(std::cin >> x){
+        v.push_back(x);
+    }
+
+    sort(v);
+
+    for(const auto& element: v){
+        std::cout << element << std::endl;
+    }
+
 
     return 0;
 }

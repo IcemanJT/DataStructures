@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <vector>
-#include <chrono>
 
 template <class T>
 void sort(std::vector<T>& v) {
@@ -29,7 +28,9 @@ void sort(std::vector<T>& v) {
 
 }
 
+
 int main(){
+
     std::ios_base::sync_with_stdio(false);
 
     std::vector<int> v;
@@ -39,11 +40,11 @@ int main(){
         v.push_back(x);
     }
 
-    auto start = std::chrono::high_resolution_clock::now();
     sort(v);
-    auto end = std::chrono::high_resolution_clock::now();
 
-    std::chrono::duration<double> elapsed = end - start;
+    for(const auto& element: v){
+        std::cout << element << std::endl;
+    }
 
 
     return 0;
