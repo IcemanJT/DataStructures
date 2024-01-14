@@ -19,7 +19,7 @@ class Dict
 private:
     int c_size;
     int buckets_n;
-    LinkedList<K, V> **buckets_list;
+    LinkedList<K, V> *buckets_list;
 
 public:
     Dict(int buckets_num);
@@ -44,20 +44,13 @@ inline Dict<K, V>::Dict(int buckets_num)
 {
     c_size = 0;
     buckets_n = buckets_num;
-    buckets_list = new LinkedList<K, V> *[buckets_num];
-    for (int i = 0; i < buckets_num; ++i)
-    {
-        buckets_list[i] = new LinkedList<K, V>();
-    }
+    buckets_list = new LinkedList<K, V>[buckets_num];
+
 }
 
 template <class K, class V>
 inline Dict<K, V>::~Dict()
 {
-    for (int i = 0; i < buckets_n; ++i)
-    {
-        delete buckets_list[i];
-    }
     delete[] buckets_list;
 }
 
@@ -66,7 +59,7 @@ inline void Dict<K, V>::clear()
 {
     for (int i = 0; i < buckets_n; ++i)
     {
-        buckets_list[i]->clear();
+        buckets_list[i].clear();
     }
     c_size = 0;
 }
@@ -79,7 +72,7 @@ inline bool Dict<K, V>::find(const K &key)
         return false;
     }
     int bucket = hash_function(key, buckets_n);
-    return buckets_list[bucket]->find_key(key);
+    return buckets_list[bucket].find_key(key);
 }
 
 template <class K, class V>
@@ -89,12 +82,12 @@ inline bool Dict<K, V>::insert(const Pair &pair)
     V v = pair.second;
     int bucket = hash_function(k, buckets_n);
     
-    if (buckets_list[bucket]->find_pair(pair))
+    if (buckets_list[bucket].find_pair(pair))
     {
         return false;
     }
 
-    buckets_list[bucket]->push_front(pair);
+    buckets_list[bucket].push_front(pair);
     c_size++;
     return true;
 }
@@ -107,7 +100,7 @@ inline bool Dict<K, V>::erase(const K &key)
         return false;
     }
     int bucket = hash_function(key, buckets_n);
-    if (buckets_list[bucket]->remove(key))
+    if (buckets_list[bucket].remove(key))
     {
         c_size--;
         return true;
@@ -119,15 +112,15 @@ template <class K, class V>
 inline V &Dict<K, V>::operator[](const K &key)
 {
     int bucket = hash_function(key, buckets_n);
-    if (buckets_list[bucket]->find_key(key))
+    if (buckets_list[bucket].find_key(key))
     {
-        return buckets_list[bucket]->get(key);
+        return buckets_list[bucket].get(key);
     }
 
     Pair pair(key, V());
-    buckets_list[bucket]->push_front(pair);
+    buckets_list[bucket].push_front(pair);
     c_size++;
-    return buckets_list[bucket]->get(key);
+    return buckets_list[bucket].get(key);
 }
 
 template <class K, class V>
@@ -146,12 +139,12 @@ template <class K, class V>
 inline void Dict<K, V>::buckets()
 {
     
-    int shortes = buckets_list[0]->size();
-    int longest = buckets_list[0]->size();
+    int shortes = buckets_list[0].size();
+    int longest = buckets_list[0].size();
 
     for (int i = 0; i < buckets_n; ++i)
     {
-        int size = buckets_list[i]->size();
+        int size = buckets_list[i].size();
         if (size < shortes)
         {
             shortes = size;
